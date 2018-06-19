@@ -10,6 +10,12 @@ contract BasicToken is ERC20Basic {
 
   uint256 totalSupply_;
 
+    modifier onlyPayloadSize(uint size) { 
+		  assert(msg.data.length >= size + 4);
+	  _;    
+	}
+	
+  
   /**
   * @dev total number of tokens in existence
   */
@@ -22,7 +28,7 @@ contract BasicToken is ERC20Basic {
   * @param _to The address to transfer to.
   * @param _value The amount to be transferred.
   */
-  function transfer(address _to, uint256 _value) public returns (bool) {
+  function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public returns (bool) {
     require(_to != address(0));
     require(_value <= balances[msg.sender]);
 
